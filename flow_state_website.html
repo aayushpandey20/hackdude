@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Flow State Facilitator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 2rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: moveGrid 20s linear infinite;
+        }
+
+        @keyframes moveGrid {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(50px, 50px); }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            color: white;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            animation: fadeInUp 1s ease;
+        }
+
+        .tagline {
+            font-size: 1.5rem;
+            color: rgba(255,255,255,0.9);
+            margin-bottom: 2rem;
+            animation: fadeInUp 1s ease 0.2s both;
+        }
+
+        .cta-button {
+            background: white;
+            color: #667eea;
+            padding: 1rem 2.5rem;
+            font-size: 1.2rem;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            animation: fadeInUp 1s ease 0.4s both;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .features {
+            background: white;
+            padding: 5rem 2rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h2 {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            color: #333;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        .feature-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            color: white;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .demo-section {
+            background: #f8f9fa;
+            padding: 5rem 2rem;
+        }
+
+        .demo-container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+        }
+
+        .demo-controls {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .demo-button {
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: #667eea;
+            color: white;
+        }
+
+        .demo-button:hover {
+            background: #764ba2;
+            transform: scale(1.05);
+        }
+
+        .status-display {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 2rem;
+            border-radius: 15px;
+            margin-bottom: 2rem;
+            color: white;
+            text-align: center;
+        }
+
+        .status-indicator {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .metric-card {
+            background: rgba(255,255,255,0.1);
+            padding: 1.5rem;
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+        }
+
+        .metric-value {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .metric-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .chart-container {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            margin-top: 2rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .bar-chart {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-around;
+            height: 200px;
+            margin-top: 1rem;
+        }
+
+        .bar {
+            background: linear-gradient(to top, #667eea, #764ba2);
+            width: 50px;
+            border-radius: 5px 5px 0 0;
+            transition: height 0.5s ease;
+            position: relative;
+        }
+
+        .bar-label {
+            position: absolute;
+            bottom: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.8rem;
+            color: #666;
+        }
+
+        .typing-area {
+            width: 100%;
+            min-height: 150px;
+            padding: 1rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1rem;
+            margin-top: 2rem;
+            resize: vertical;
+        }
+
+        footer {
+            background: #2d3748;
+            color: white;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .flow-state-active {
+            animation: flowGlow 2s ease-in-out infinite;
+        }
+
+        @keyframes flowGlow {
+            0%, 100% {
+                box-shadow: 0 0 20px rgba(102, 126, 234, 0.5);
+            }
+            50% {
+                box-shadow: 0 0 40px rgba(102, 126, 234, 0.8);
+            }
+        }
+    </style>
+</head>
+<body>
+    <section class="hero">
+        <div class="hero-content">
+            <h1>AI Flow State Facilitator</h1>
+            <p class="tagline">Unlock Your Maximum Cognitive Potential</p>
+            <button class="cta-button" onclick="scrollToDemo()">Try Live Demo</button>
+        </div>
+    </section>
+
+    <section class="features">
+        <div class="container">
+            <h2>Revolutionary Features</h2>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🧠</div>
+                    <h3>Real-Time Flow Detection</h3>
+                    <p>Advanced AI analyzes your work patterns, typing cadence, and task focus to precisely identify when you enter a flow state.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🚀</div>
+                    <h3>Dynamic Amplification</h3>
+                    <p>Once flow is detected, the system intelligently blocks distractions and optimizes your environment to extend deep work.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">💪</div>
+                    <h3>Stamina Building</h3>
+                    <p>Gradually increase your focus capacity with intelligent micro-interventions and optimized break suggestions.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <h3>Performance Analytics</h3>
+                    <p>Private dashboard visualizing your flow potential, triggers, and actionable insights for continuous improvement.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="demo-section" id="demo">
+        <div class="container">
+            <h2>Interactive Demo</h2>
+            <div class="demo-container">
+                <div class="status-display" id="statusDisplay">
+                    <div class="status-indicator" id="statusIcon">⏱️</div>
+                    <h3 id="statusText">Ready to Begin</h3>
+                    <p id="statusDescription">Start typing to activate flow detection</p>
+                    
+                    <div class="metrics-grid">
+                        <div class="metric-card">
+                            <div class="metric-value" id="focusScore">0%</div>
+                            <div class="metric-label">Focus Score</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-value" id="flowDuration">0:00</div>
+                            <div class="metric-label">Flow Duration</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-value" id="typingSpeed">0</div>
+                            <div class="metric-label">Words/Min</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-value" id="productivity">0%</div>
+                            <div class="metric-label">Productivity</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="demo-controls">
+                    <button class="demo-button" onclick="startSession()">Start Focus Session</button>
+                    <button class="demo-button" onclick="resetDemo()">Reset</button>
+                    <button class="demo-button" onclick="simulateDistraction()">Simulate Distraction</button>
+                </div>
+
+                <textarea 
+                    class="typing-area" 
+                    id="typingArea" 
+                    placeholder="Start typing here to simulate work... The AI will detect your flow state based on typing patterns and consistency."
+                ></textarea>
+
+                <div class="chart-container">
+                    <h3>Flow State History</h3>
+                    <div class="bar-chart" id="flowChart">
+                        <div class="bar" style="height: 0px;"><span class="bar-label">Mon</span></div>
+                        <div class="bar" style="height: 0px;"><span class="bar-label">Tue</span></div>
+                        <div class="bar" style="height: 0px;"><span class="bar-label">Wed</span></div>
+                        <div class="bar" style="height: 0px;"><span class="bar-label">Thu</span></div>
+                        <div class="bar" style="height: 0px;"><span class="bar-label">Fri</span></div>
+                        <div class="bar" style="height: 0px;"><span class="bar-label">Sat</span></div>
+                        <div class="bar" style="height: 0px;"><span class="bar-label">Sun</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2025 AI Flow State Facilitator. Empowering Deep Work.</p>
+    </footer>
+
+    <script>
+        let isInFlow = false;
+        let flowStartTime = null;
+        let typingData = [];
+        let lastTypingTime = Date.now();
+        let wordCount = 0;
+        let sessionActive = false;
+
+        const typingArea = document.getElementById('typingArea');
+        const statusIcon = document.getElementById('statusIcon');
+        const statusText = document.getElementById('statusText');
+        const statusDescription = document.getElementById('statusDescription');
+        const statusDisplay = document.getElementById('statusDisplay');
+
+        function scrollToDemo() {
+            document.getElementById('demo').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function startSession() {
+            sessionActive = true;
+            updateStatus('⚡', 'Session Active', 'Type consistently to enter flow state');
+            typingArea.focus();
+        }
+
+        function updateStatus(icon, text, description) {
+            statusIcon.textContent = icon;
+            statusText.textContent = text;
+            statusDescription.textContent = description;
+        }
+
+        typingArea.addEventListener('input', function(e) {
+            if (!sessionActive) startSession();
+
+            const currentTime = Date.now();
+            const timeSinceLastType = currentTime - lastTypingTime;
+            
+            typingData.push(timeSinceLastType);
+            if (typingData.length > 20) typingData.shift();
+            
+            lastTypingTime = currentTime;
+            wordCount = this.value.trim().split(/\s+/).filter(w => w.length > 0).length;
+
+            const avgInterval = typingData.reduce((a, b) => a + b, 0) / typingData.length;
+            const consistency = calculateConsistency(typingData);
+
+            if (consistency > 0.7 && avgInterval < 300 && avgInterval > 50 && typingData.length >= 15) {
+                enterFlowState();
+            } else if (isInFlow && (consistency < 0.5 || avgInterval > 500)) {
+                exitFlowState();
+            }
+
+            updateMetrics();
+        });
+
+        function calculateConsistency(data) {
+            if (data.length < 2) return 0;
+            const avg = data.reduce((a, b) => a + b, 0) / data.length;
+            const variance = data.reduce((sum, val) => sum + Math.pow(val - avg, 2), 0) / data.length;
+            const stdDev = Math.sqrt(variance);
+            return Math.max(0, 1 - (stdDev / avg));
+        }
+
+        function enterFlowState() {
+            if (!isInFlow) {
+                isInFlow = true;
+                flowStartTime = Date.now();
+                statusDisplay.classList.add('flow-state-active');
+                updateStatus('🌊', 'FLOW STATE DETECTED', 'Distractions blocked. You are in the zone!');
+            }
+        }
+
+        function exitFlowState() {
+            if (isInFlow) {
+                isInFlow = false;
+                flowStartTime = null;
+                statusDisplay.classList.remove('flow-state-active');
+                updateStatus('⚡', 'Focus Session Active', 'Maintain consistent typing to re-enter flow');
+            }
+        }
+
+        function updateMetrics() {
+            const focusScore = Math.min(100, Math.round(calculateConsistency(typingData) * 100));
+            document.getElementById('focusScore').textContent = focusScore + '%';
+
+            if (isInFlow && flowStartTime) {
+                const duration = Math.floor((Date.now() - flowStartTime) / 1000);
+                const minutes = Math.floor(duration / 60);
+                const seconds = duration % 60;
+                document.getElementById('flowDuration').textContent = 
+                    `${minutes}:${seconds.toString().padStart(2, '0')}`;
+            }
+
+            const wpm = wordCount > 0 ? Math.round(wordCount / ((Date.now() - lastTypingTime + 60000) / 60000)) : 0;
+            document.getElementById('typingSpeed').textContent = Math.min(wpm, 100);
+
+            const productivity = isInFlow ? Math.min(100, 60 + focusScore * 0.4) : focusScore;
+            document.getElementById('productivity').textContent = Math.round(productivity) + '%';
+        }
+
+        function simulateDistraction() {
+            exitFlowState();
+            typingData = [];
+            updateStatus('📱', 'Distraction Detected', 'Refocus to return to flow state');
+            setTimeout(() => {
+                if (sessionActive) {
+                    updateStatus('⚡', 'Session Active', 'Resume typing to rebuild focus');
+                }
+            }, 2000);
+        }
+
+        function resetDemo() {
+            sessionActive = false;
+            isInFlow = false;
+            flowStartTime = null;
+            typingData = [];
+            wordCount = 0;
+            typingArea.value = '';
+            statusDisplay.classList.remove('flow-state-active');
+            updateStatus('⏱️', 'Ready to Begin', 'Start typing to activate flow detection');
+            document.getElementById('focusScore').textContent = '0%';
+            document.getElementById('flowDuration').textContent = '0:00';
+            document.getElementById('typingSpeed').textContent = '0';
+            document.getElementById('productivity').textContent = '0%';
+        }
+
+        // Animate chart on load
+        window.addEventListener('load', function() {
+            const bars = document.querySelectorAll('.bar');
+            setTimeout(() => {
+                bars.forEach((bar, index) => {
+                    const height = Math.random() * 150 + 50;
+                    bar.style.height = height + 'px';
+                });
+            }, 500);
+        });
+
+        setInterval(updateMetrics, 1000);
+    </script>
+</body>
+</html>
